@@ -8,7 +8,7 @@ class ProcessMonitor():
                 "ur20": False,
                 "nex10": False,
                 "rgt_manager": False,
-                "foxglove_bridge": False,
+                "foxglove": False,
                 }
         self.stop_event = threading.Event()
         self.thread = None
@@ -22,24 +22,24 @@ class ProcessMonitor():
 
     def update_loop(self):
         while not self.stop_event.is_set():
-            node_list = self.run_command("ros2 node list", 4)
+            node_list = self.run_command("ros2 node list", 2)
             if "/ur20/ur20" in node_list:
-                self.status["ur20"] = self.check_command_output("ros2 control list_hardware_components -c /ur20/controller_manager", "label=active", 4)
+                self.status["ur20"] = self.check_command_output("ros2 control list_hardware_components -c /ur20/controller_manager", "label=active", 3)
             else:
                 self.status["ur20"] = False
             if "/nex10/nex10" in node_list:
-                self.status["nex10"] = self.check_command_output("ros2 control list_hardware_components -c /nex10/controller_manager", "label=active", 4)
+                self.status["nex10"] = self.check_command_output("ros2 control list_hardware_components -c /nex10/controller_manager", "label=active", 3)
             else:
                 self.status["nex10"] = False
             if "rgt_manager" in node_list:
                 self.status["rgt_manager"] = True
             else:
                 self.status["rgt_manager"] = False
-            if "foxglove_bridge" in node_list:
-                self.status["foxglove_bridge"] = True
+            if "foxglove" in node_list:
+                self.status["foxglove"] = True
             else:
-                self.status["foxglove_bridge"] = False
-            time.sleep(1)
+                self.status["foxglove"] = False
+            time.sleep(2)
     
     def get_status(self):
         return self.status

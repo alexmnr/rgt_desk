@@ -8,6 +8,11 @@ export const useStore = defineStore('store', {
       "nex10": "unknown",
       "rgt_manager": "unknown",
       "foxglove_bridge": "unknown",
+      "tool_side_realsense": "unknown",
+      "bed_side_realsense": "unknown",
+      "gelsight": "unknown",
+      "thermal_camera": "unknown",
+      "audio_capture": "unknown",
     },
     configs: {
       ur20: {

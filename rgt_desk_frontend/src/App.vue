@@ -31,6 +31,14 @@ onUnmounted(() => {
         >
           <LayoutDashboard :size="18" /> <span>Main</span>
         </RouterLink>
+
+        <RouterLink 
+          to="/sensors" 
+          class="nav-link"
+          exact-active-class="bg-gray-700 text-white"
+        >
+          <Activity :size="18" /> <span>Sensors</span>
+        </RouterLink>
         
         <RouterLink 
           to="/tools" 
@@ -38,14 +46,6 @@ onUnmounted(() => {
           exact-active-class="bg-gray-700 text-white"
         >
           <Toolbox :size="18" /> <span>Tools</span>
-        </RouterLink>
-        
-        <RouterLink 
-          to="/sensors" 
-          class="nav-link"
-          exact-active-class="bg-gray-700 text-white"
-        >
-          <Activity :size="18" /> <span>Sensors</span>
         </RouterLink>
       </nav>
     </header>

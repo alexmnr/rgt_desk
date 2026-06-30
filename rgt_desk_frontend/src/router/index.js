@@ -8,8 +8,8 @@ const router = createRouter({
   routes: [
     { path: '/', redirect: '/main' },
     { path: '/main', name: 'main', component: MainTab },
-    { path: '/tools', name: 'tools', component: ToolsTab },
     { path: '/sensors', name: 'sensors', component: SensorsTab },
+    { path: '/tools', name: 'tools', component: ToolsTab },
   ]
 });
 

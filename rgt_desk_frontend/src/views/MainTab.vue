@@ -1,14 +1,9 @@
 <script setup>
-import { reactive } from 'vue';
 import { useStore } from '../stores/store';
 import Container from '../components/Container.vue';
 import ToggleSwitch from '../components/ToggleSwitch.vue';
 
 const store = useStore();
-// handler functions
-const handleStartUr20 = () => {store.startService('ur20', { ...ur20Config });};
-const handleStartNex10 = () => {store.startService('nex10', { ...nex10Config });};
-
 </script>
 
 <template>

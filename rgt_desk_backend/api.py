@@ -14,6 +14,11 @@ def get_status():
             "nex10": "unkown",
             "rgt_manager": "unkown",
             "foxglove_bridge": "unkown",
+            "tool_side_realsense": "unknown",
+            "bed_side_realsense": "unknown",
+            "gelsight": "unknown",
+            "thermal_camera": "unknown",
+            "audio_capture": "unknown",
             }
     for process_name in status:
         if process_name in windows and process_status[process_name] == True:

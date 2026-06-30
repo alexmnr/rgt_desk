@@ -7,7 +7,7 @@ tmux_server = libtmux.Server()
 def get_main_session() -> libtmux.Session:
     session = tmux_server.sessions.get(session_name=TMUX_SESSION_NAME, default=None)
     if not session:
-        session = tmux_server.new_session(session_name=TMUX_SESSION_NAME, window_name="main", start_directory="..")
+        session = tmux_server.new_session(session_name=TMUX_SESSION_NAME, window_name="main")
     return session
 
 def get_windows() -> list[str]:

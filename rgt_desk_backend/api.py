@@ -10,10 +10,10 @@ def get_status():
     windows = tmux.get_windows()
     process_status = process_monitor.get_status()
     status = {
-            "ur20": "unkown",
-            "nex10": "unkown",
-            "rgt_manager": "unkown",
-            "foxglove_bridge": "unkown",
+            "ur20": "unknown",
+            "nex10": "unknown",
+            "rgt_manager": "unknown",
+            "foxglove_bridge": "unknown",
             "tool_side_realsense": "unknown",
             "bed_side_realsense": "unknown",
             "gelsight": "unknown",
@@ -35,18 +35,18 @@ def get_status():
 def start_process(req: StartProcessRequest):
     if req.name == "ur20":
         use_mock_hardware = bool((req.params or {}).get("use_mock_hardware", False))
-        command = f"ros2 launch ur_bringup bringup.launch.py ns:=ur20 use_mock_hardware:={use_mock_hardware}"
+        command = f"../process_scripts/ur20.sh {use_mock_hardware}"
         tmux.start_process(req.name, command)
     elif req.name == "nex10":
         use_mock_hardware = bool((req.params or {}).get("use_mock_hardware", False))
         use_ft_sensor = bool((req.params or {}).get("use_ft_sensor", False))
-        command = f"ros2 launch ynx_bringup bringup.launch.py ns:=nex10 use_ft_sensor:={use_ft_sensor} use_mock_hardware:={use_mock_hardware}"
+        command = f"../process_scripts/nex10.sh {use_mock_hardware} {use_ft_sensor}"
         tmux.start_process(req.name, command)
     elif req.name == "rgt_manager":
-        command = "ros2 run rgt_manager rgt_manager"
+        command = "../process_scripts/rgt_manager.sh"
         tmux.start_process(req.name, command)
     elif req.name == "foxglove_bridge":
-        command = "ros2 run foxglove_bridge foxglove_bridge"
+        command = "../process_scripts/foxglove_bridge.sh"
         tmux.start_process(req.name, command)
     else:
         raise HTTPException(status_code=404, detail=f"Process '{req.name}' is not recognized.")

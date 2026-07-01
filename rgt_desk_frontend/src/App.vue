@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import { useStore } from './stores/store';
-import { LayoutDashboard, Activity, Toolbox } from 'lucide-vue-next';
+import { LayoutDashboard, Activity, Toolbox } from '@lucide/vue';
 
 const store = useStore();
 

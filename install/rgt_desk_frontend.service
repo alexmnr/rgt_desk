@@ -1,0 +1,18 @@
+[Unit]
+Description=RGT Desk Frontend
+After=network.target
+
+[Service]
+User=mfi
+WorkingDirectory=/home/mfi/repos/rgt_desk/rgt_desk_frontend
+
+ExecStartPre=/usr/bin/env npm run build
+
+ExecStart=/usr/bin/env npm run preview -- --port 80 --host 192.168.19.10
+
+Restart=always
+# Give the service more time to start up in case the build takes a while
+TimeoutStartSec=120
+
+[Install]
+WantedBy=multi-user.target

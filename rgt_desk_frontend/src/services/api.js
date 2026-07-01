@@ -1,7 +1,7 @@
 import axios from 'axios';
-
+const dynamicBaseURL = `${window.location.protocol}//${window.location.hostname}:8000`;
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000', 
+  baseURL: dynamicBaseURL, 
   headers: {
     'Content-Type': 'application/json'
   }

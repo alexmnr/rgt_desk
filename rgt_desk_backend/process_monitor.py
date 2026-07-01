@@ -14,11 +14,9 @@ class ProcessMonitor():
                 "nex10": "stopped",
                 "rgt_manager": "stopped",
                 "foxglove_bridge": "stopped",
-                "tool_side_realsense": "stopped",
-                "bed_side_realsense": "stopped",
-                "gelsight": "stopped",
-                "thermal_camera": "stopped",
-                "audio_capture": "stopped",
+                "bed_side_cam": "stopped",
+                "bed_side_thermal": "stopped",
+                "bed_side_audio": "stopped",
                 "spacemouse": "stopped",
                 }
         self.stop_event = threading.Event()

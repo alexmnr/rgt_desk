@@ -4,20 +4,12 @@ import api from '../services/api';
 export const useStore = defineStore('store', {
   state: () => ({
     process_status: {
-      "ur20": "stopped",
-      "nex10": "stopped",
-      "rgt_manager": "stopped",
-      "foxglove_bridge": "stopped",
-      "tool_side_realsense": "stopped",
-      "bed_side_realsense": "stopped",
-      "gelsight": "stopped",
-      "thermal_camera": "stopped",
-      "audio_capture": "stopped",
-      "spacemouse": "stopped",
     },
     service_status: {
       "home": "idle",
       "park": "idle",
+      "change_tool": "idle",
+      "override_tool_location": "idle",
     },
     configs: {
       ur20: {
@@ -37,6 +29,14 @@ export const useStore = defineStore('store', {
       park: {
         ns: "",
         speed: 0.1,
+      },
+      change_tool: {
+        robot: "",
+        tool: "",
+      },
+      override_tool_location: {
+        tool: "",
+        location: "",
       },
     },
     pollingInterval: null

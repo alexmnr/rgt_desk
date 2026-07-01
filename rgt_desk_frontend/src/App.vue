@@ -41,11 +41,11 @@ onUnmounted(() => {
         </RouterLink>
         
         <RouterLink 
-          to="/tools" 
+          to="/utilities" 
           class="nav-link"
           exact-active-class="bg-gray-700 text-white"
         >
-          <Toolbox :size="18" /> <span>Tools</span>
+          <Toolbox :size="18" /> <span>Utilities</span>
         </RouterLink>
       </nav>
     </header>

@@ -19,7 +19,7 @@ defineEmits(['update:modelValue']);
 </script>
 
 <template>
-  <div class="flex items-center justify-between gap-3 p-2">
+  <div class="flex items-center justify-between gap-3 py-2">
     <label class="text-sm font-medium text-gray-300 whitespace-nowrap">
       {{ label }}
     </label>

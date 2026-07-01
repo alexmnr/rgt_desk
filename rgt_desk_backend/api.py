@@ -7,29 +7,8 @@ router = APIRouter()
 
 @router.get("/status")
 def get_status():
-    windows = tmux.get_windows()
     process_status = process_monitor.get_status()
-    status = {
-            "ur20": "unknown",
-            "nex10": "unknown",
-            "rgt_manager": "unknown",
-            "foxglove_bridge": "unknown",
-            "tool_side_realsense": "unknown",
-            "bed_side_realsense": "unknown",
-            "gelsight": "unknown",
-            "thermal_camera": "unknown",
-            "audio_capture": "unknown",
-            }
-    for process_name in status:
-        if process_name in windows and process_status[process_name] == True:
-            status[process_name] = "running"
-        elif process_name in windows and process_status[process_name] == False:
-            status[process_name] = "started"
-        elif process_name not in windows and process_status[process_name] == False:
-            status[process_name] = "stopped"
-        else:
-            status[process_name] = "unknown"
-    return status
+    return process_status
 
 @router.post("/start")
 def start_process(req: StartProcessRequest):

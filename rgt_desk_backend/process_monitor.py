@@ -1,22 +1,29 @@
 import threading
 import subprocess
 import time
+import rclpy
+from rclpy.node import Node
+import tmux
+from ur_dashboard_msgs.msg import SafetyMode
+from controller_manager_msgs.msg import ControllerManagerActivity
 
 class ProcessMonitor():
     def __init__(self):
         self.status = {
-                "ur20": False,
-                "nex10": False,
-                "rgt_manager": False,
-                "foxglove_bridge": False,
-                "tool_side_realsense": False,
-                "bed_side_realsense": False,
-                "gelsight": False,
-                "thermal_camera": False,
-                "audio_capture": False,
+                "ur20": "stopped",
+                "nex10": "stopped",
+                "rgt_manager": "stopped",
+                "foxglove_bridge": "stopped",
+                "tool_side_realsense": "stopped",
+                "bed_side_realsense": "stopped",
+                "gelsight": "stopped",
+                "thermal_camera": "stopped",
+                "audio_capture": "stopped",
                 }
         self.stop_event = threading.Event()
-        self.thread = None
+        self.ur20_error = False
+        self.nex10_error = False 
+        self._thread = None
 
     def start(self):
         self._thread = threading.Thread(target=self.update_loop, daemon=True)
@@ -24,48 +31,76 @@ class ProcessMonitor():
 
     def stop(self):
         self.stop_event.set()
+        if self._thread:
+            self._thread.join()
 
     def update_loop(self):
-        while not self.stop_event.is_set():
-            node_list = self.run_command("ros2 node list", 5)
-            if "/ur20/ur20" in node_list:
-                self.status["ur20"] = self.check_command_output("ros2 topic echo /ur20/io_and_status_controller/safety_mode --once", "mode: 1", 5)
+        rclpy.init()
+        monitor_node = Node('rgt_desk')
+
+        # UR20 Error Monitor
+        def ur20_error_monitor_callback(msg):
+            if msg.mode != 1:
+                self.ur20_error = True
             else:
-                self.status["ur20"] = False
-            if "/nex10/nex10" in node_list:
-                self.status["nex10"] = self.check_command_output("ros2 control list_hardware_components -c /nex10/controller_manager", "nex10_joint_1/position [available]", 5)
-            else:
-                self.status["nex10"] = False
-            if "rgt_manager" in node_list:
-                self.status["rgt_manager"] = True
-            else:
-                self.status["rgt_manager"] = False
-            if "foxglove_bridge" in node_list:
-                self.status["foxglove_bridge"] = True
-            else:
-                self.status["foxglove_bridge"] = False
-            if "tool_side_realsense" in node_list:
-                self.status["tool_side_realsense"] = True
-            else:
-                self.status["tool_side_realsense"] = False
-            if "bed_side_realsense" in node_list:
-                self.status["bed_side_realsense"] = True
-            else:
-                self.status["bed_side_realsense"] = False
-            if "gelsight" in node_list:
-                self.status["gelsight"] = True
-            else:
-                self.status["gelsight"] = False
-            if "thermal_camera" in node_list:
-                self.status["thermal_camera"] = True
-            else:
-                self.status["thermal_camera"] = False
-            if "audio_capture" in node_list:
-                self.status["audio_capture"] = True
-            else:
-                self.status["audio_capture"] = False
-            time.sleep(1)
-    
+                self.ur20_error = False
+        monitor_node.create_subscription(
+            SafetyMode,
+            '/ur20/io_and_status_controller/safety_mode',
+            ur20_error_monitor_callback,
+            10
+        )
+        
+        # Nex10 Error Monitor
+        def nex10_error_monitor_callback(msg):
+            for hardware_component in msg.hardware_components:
+                if hardware_component.name == "nex10":
+                    if hardware_component.state.label == "unconfigured":
+                        self.nex10_error = True
+                    else:
+                        self.nex10_error = False
+        monitor_node.create_subscription(
+            ControllerManagerActivity,
+            '/nex10/controller_manager/activity',
+            nex10_error_monitor_callback,
+            10
+        )
+        
+        try:
+            while not self.stop_event.is_set() and rclpy.ok():
+                # get windows
+                windows = tmux.get_windows()
+                # get nodes list
+                names_and_namespaces = monitor_node.get_node_names_and_namespaces()
+                node_paths = []
+                for name, ns in names_and_namespaces:
+                    if ns == '/':
+                        node_paths.append(f"/{name}")
+                    else:
+                        node_paths.append(f"{ns}/{name}")
+                node_list = "\n".join(node_paths)
+                # set status accordingly
+                for process_name in self.status:
+                    if process_name in windows and process_name in node_list:
+                        self.status[process_name] = "running"
+                    elif process_name in windows and process_name not in node_list:
+                        self.status[process_name] = "started"
+                    else:
+                        self.status[process_name] = "stopped"
+                # UR20 Error Check
+                if "ur20" in windows and self.ur20_error:
+                    self.status["ur20"] = "error"
+                # Nex10 Error Check
+                if "nex10" in windows and self.nex10_error:
+                    self.status["nex10"] = "error"
+                # Process all incoming callbacks
+                rclpy.spin_once(monitor_node, timeout_sec=0.1)
+                time.sleep(1.0)
+                
+        finally:
+            monitor_node.destroy_node()
+            rclpy.shutdown()
+
     def get_status(self):
         return self.status
 

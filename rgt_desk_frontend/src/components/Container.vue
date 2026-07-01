@@ -20,8 +20,8 @@ const store = useStore();
 const STATUS_COLORS = {
   running: '#22c55e', // green-500
   started: '#eab308', // yellow-500
-  stopped: '#ef4444', // red-500
-  unknown: '#9ca3af', // gray-400 (fallback)
+  error:   '#ef4444', // red-500
+  stopped: '#9ca3af', // gray-400 (fallback)
 };
 const currentStatus = computed(() => {
   if (!props.id || !store.status[props.id]) return 'unknown';

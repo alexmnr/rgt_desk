@@ -24,8 +24,8 @@ const STATUS_COLORS = {
   stopped: '#9ca3af', // gray-400 (fallback)
 };
 const currentStatus = computed(() => {
-  if (!props.id || !store.status[props.id]) return 'unknown';
-  return store.status[props.id];
+  if (!props.id || !store.process_status[props.id]) return 'unknown';
+  return store.process_status[props.id];
 });
 const statusText = computed(() => currentStatus.value);
 const statusColor = computed(() => STATUS_COLORS[currentStatus.value] || STATUS_COLORS.unknown);

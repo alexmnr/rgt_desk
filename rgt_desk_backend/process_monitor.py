@@ -19,6 +19,7 @@ class ProcessMonitor():
                 "gelsight": "stopped",
                 "thermal_camera": "stopped",
                 "audio_capture": "stopped",
+                "spacemouse": "stopped",
                 }
         self.stop_event = threading.Event()
         self.ur20_error = False

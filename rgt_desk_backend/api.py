@@ -1,16 +1,17 @@
 from fastapi import APIRouter, HTTPException
 import tmux
-from models import StartProcessRequest, StopProcessRequest
+from models import StartProcessRequest, StopProcessRequest, RunServiceRequest
 from process_monitor import process_monitor
+import subprocess
 
 router = APIRouter()
 
-@router.get("/status")
+@router.get("/get_status")
 def get_status():
     process_status = process_monitor.get_status()
     return process_status
 
-@router.post("/start")
+@router.post("/start_process")
 def start_process(req: StartProcessRequest):
     if req.name == "ur20":
         use_mock_hardware = bool((req.params or {}).get("use_mock_hardware", False))
@@ -27,12 +28,15 @@ def start_process(req: StartProcessRequest):
     elif req.name == "foxglove_bridge":
         command = "../process_scripts/foxglove_bridge.sh"
         tmux.start_process(req.name, command)
+    elif req.name == "spacemouse":
+        command = f"../process_scripts/spacemouse.sh {req.params['ns']}"
+        tmux.start_process(req.name, command)
     else:
         raise HTTPException(status_code=404, detail=f"Process '{req.name}' is not recognized.")
 
     return {"status": "started", "name": req.name}
 
-@router.post("/stop")
+@router.post("/stop_process")
 def stop_process(req: StopProcessRequest):
     if req.name == "ur20":
         tmux.stop_process(req.name)
@@ -42,7 +46,38 @@ def stop_process(req: StopProcessRequest):
         tmux.stop_process(req.name)
     elif req.name == "foxglove_bridge":
         tmux.stop_process(req.name)
+    elif req.name == "spacemouse":
+        tmux.stop_process(req.name)
     else:
         raise HTTPException(status_code=404, detail=f"Process '{req.name}' is not recognized.")
 
     return {"status": "stopped", "name": req.name}
+
+@router.post("/execute_service")
+def execute_service(req: RunServiceRequest):
+    if req.name == "home":
+        command = f"../service_scripts/home.sh {req.params['ns']} {req.params['speed']}"
+        try:
+            subprocess.run(
+                    command,
+                    shell=True,
+                    capture_output=False,
+                    text=False,
+                    )
+        except:
+            return {"status": "failed", "name": req.name}
+    elif req.name == "park":
+        command = f"../service_scripts/park.sh {req.params['ns']} {req.params['speed']}"
+        try:
+            subprocess.run(
+                    command,
+                    shell=True,
+                    capture_output=False,
+                    text=False,
+                    )
+        except:
+            return {"status": "failed", "name": req.name}
+    else:
+        raise HTTPException(status_code=404, detail=f"Service '{req.name}' is not recognized.")
+
+    return {"status": "executed", "name": req.name}

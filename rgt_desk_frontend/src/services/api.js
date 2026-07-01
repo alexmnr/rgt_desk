@@ -9,12 +9,15 @@ const apiClient = axios.create({
 
 export default {
   getStatus() {
-    return apiClient.get('/status');
+    return apiClient.get('/get_status');
   },
   startProcess(name, params = {}) {
-    return apiClient.post('/start', { name, params });
+    return apiClient.post('/start_process', { name, params });
   },
   stopProcess(name) {
-    return apiClient.post('/stop', { name });
-  }
+    return apiClient.post('/stop_process', { name });
+  },
+  executeService(name, params = {}) {
+    return apiClient.post('/execute_service', { name, params });
+  },
 };

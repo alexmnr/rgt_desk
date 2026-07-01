@@ -7,3 +7,7 @@ class StartProcessRequest(BaseModel):
 
 class StopProcessRequest(BaseModel):
     name: str
+
+class RunServiceRequest(BaseModel):
+    name: str
+    params: Optional[Dict[str, Any]] = None

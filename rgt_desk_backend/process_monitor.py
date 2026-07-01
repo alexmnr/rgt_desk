@@ -78,6 +78,7 @@ class ProcessMonitor():
                     else:
                         node_paths.append(f"{ns}/{name}")
                 node_list = "\n".join(node_paths)
+                print(node_list)
                 # set status accordingly
                 for process_name in self.status:
                     if process_name in windows and process_name in node_list:

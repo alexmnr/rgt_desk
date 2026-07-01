@@ -13,3 +13,7 @@ echo "Removing frontend..."
 cd rgt_desk_frontend
 rm -rf node_modules
 rm -rf dist
+sudo systemctl stop rgt_desk_frontend
+sudo systemctl disable rgt_desk_frontend
+sudo rm /etc/systemd/system/rgt_desk_frontend.service
+sudo systemctl daemon-reload

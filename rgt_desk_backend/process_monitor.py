@@ -18,6 +18,8 @@ class ProcessMonitor():
                 "bed_side_thermal": "stopped",
                 "bed_side_audio": "stopped",
                 "spacemouse": "stopped",
+                "panda": "stopped",
+                "space_panda_link": "stopped",
                 }
         self.stop_event = threading.Event()
         self.ur20_error = False
@@ -78,7 +80,6 @@ class ProcessMonitor():
                     else:
                         node_paths.append(f"{ns}/{name}")
                 node_list = "\n".join(node_paths)
-                print(node_list)
                 # set status accordingly
                 for process_name in self.status:
                     if process_name in windows and process_name in node_list:

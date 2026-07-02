@@ -10,6 +10,7 @@ export const useStore = defineStore('store', {
       "park": "idle",
       "change_tool": "idle",
       "override_tool_location": "idle",
+      "space_panda_link_parameters": "idle",
     },
     configs: {
       ur20: {
@@ -37,6 +38,15 @@ export const useStore = defineStore('store', {
       override_tool_location: {
         tool: "",
         location: "",
+      },
+      space_panda_link_parameters: {
+        mimicing_scale: 1.0,
+        wrench_passthrough_force_scale: 0.3,
+        wrench_passthrough_torque_scale: 0.3,
+        damping_value: 100.0,
+        mimicing_enabled: false,
+        wrench_passthrough_enabled: false,
+        damping_enabled: false,
       },
     },
     pollingInterval: null

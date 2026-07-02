@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import { useStore } from './stores/store';
-import { LayoutDashboard, Activity, Toolbox } from '@lucide/vue';
+import { LayoutDashboard, Activity, Toolbox, Panda } from '@lucide/vue';
 
 const store = useStore();
 
@@ -46,6 +46,14 @@ onUnmounted(() => {
           exact-active-class="bg-gray-700 text-white"
         >
           <Toolbox :size="18" /> <span>Utilities</span>
+        </RouterLink>
+
+        <RouterLink 
+          to="/space_panda" 
+          class="nav-link"
+          exact-active-class="bg-gray-700 text-white"
+        >
+          <Panda :size="18" /> <span>Space Panda</span>
         </RouterLink>
       </nav>
     </header>

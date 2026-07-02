@@ -40,6 +40,12 @@ def start_process(req: StartProcessRequest):
     elif req.name == "bed_side_audio":
         command = "../process_scripts/bed_side_audio.sh"
         tmux.start_process(req.name, command)
+    elif req.name == "panda":
+        command = "../process_scripts/panda.sh"
+        tmux.start_process(req.name, command)
+    elif req.name == "space_panda_link":
+        command = "../process_scripts/space_panda_link.sh"
+        tmux.start_process(req.name, command)
     else:
         raise HTTPException(status_code=404, detail=f"Process '{req.name}' is not recognized.")
 
@@ -62,6 +68,10 @@ def stop_process(req: StopProcessRequest):
     elif req.name == "bed_side_thermal":
         tmux.stop_process(req.name)
     elif req.name == "bed_side_audio":
+        tmux.stop_process(req.name)
+    elif req.name == "panda":
+        tmux.stop_process(req.name)
+    elif req.name == "space_panda_link":
         tmux.stop_process(req.name)
     else:
         raise HTTPException(status_code=404, detail=f"Process '{req.name}' is not recognized.")
@@ -105,6 +115,18 @@ def execute_service(req: RunServiceRequest):
             return {"status": "failed", "name": req.name}
     elif req.name == "override_tool_location":
         command = f"../service_scripts/override_tool_location.sh {req.params['tool']} {req.params['location']}"
+        try:
+            subprocess.run(
+                    command,
+                    shell=True,
+                    capture_output=False,
+                    text=False,
+                    )
+        except:
+            return {"status": "failed", "name": req.name}
+    elif req.name == "space_panda_link_parameters":
+        command = f"../service_scripts/space_panda_link_parameters.sh {str(float(req.params['mimicing_scale']))} {str(float(req.params['wrench_passthrough_force_scale']))} {str(float(req.params['wrench_passthrough_torque_scale']))} {str(float(req.params['damping_value']))} {req.params['mimicing_enabled']} {req.params['wrench_passthrough_enabled']} {req.params['damping_enabled']}"
+        print(command)
         try:
             subprocess.run(
                     command,

@@ -14,7 +14,7 @@ defineEmits(['update:modelValue']);
 </script>
 
 <template>
-  <div class="flex items-center gap-3 p-2">
+  <div class="flex items-center gap-3 py-2">
     <label class="relative inline-flex items-center cursor-pointer">
       <input 
         type="checkbox" 

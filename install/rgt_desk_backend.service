@@ -6,6 +6,7 @@ After=network.target
 Type=simple
 User=mfi
 Group=mfi
+LimitRTPRIO=99
 WorkingDirectory=/home/mfi/repos/rgt_desk/rgt_desk_backend
 Environment=PYTHONUNBUFFERED=1
 Environment=ROS_DOMAIN_ID=19

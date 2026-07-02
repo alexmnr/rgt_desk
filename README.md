@@ -7,12 +7,6 @@ Make sure you have a recent version of nodejs installed. I would recommend using
 nvm install 24
 ```
 
-Also install nginx:
-```bash
-sudo apt update && sudo apt install nginx
-sudo systemctl disable nginx.service --now # We will use our own service for this
-```
-
 # Install
 
 1. Clone this repo:
@@ -23,3 +17,17 @@ git clone https://github.com/alexmnr/rgt_desk.git
 2. Run the install script:
 ```bash
 cd rgt_desk && ./install.sh
+```
+
+3. Check the status of the frontend and backend:
+```bash
+sudo systemctl status rgt_desk_backend.service
+sudo systemctl status rgt_desk_frontend.service
+```
+
+# Restart
+After for changes in the code base to be reflected on the dashboard run these commands:
+```bash
+sudo systemctl restart rgt_desk_backend.service
+sudo systemctl restart rgt_desk_frontend.service
+```

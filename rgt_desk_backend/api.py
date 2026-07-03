@@ -136,6 +136,17 @@ def execute_service(req: RunServiceRequest):
                     )
         except:
             return {"status": "failed", "name": req.name}
+    elif req.name == "set_io":
+        command = f"../service_scripts/set_io.sh {req.params['robot']} {req.params['pin']} {req.params['state']}"
+        try:
+            subprocess.run(
+                    command,
+                    shell=True,
+                    capture_output=False,
+                    text=False,
+                    )
+        except:
+            return {"status": "failed", "name": req.name}
     else:
         raise HTTPException(status_code=404, detail=f"Service '{req.name}' is not recognized.")
 

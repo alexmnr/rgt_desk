@@ -21,6 +21,20 @@ const locations = [
   { label: 'UR 20', value: 'ur20' },
   { label: 'Nex 10', value: 'nex10' }
 ];
+const pins = [
+  { label: 'Pin 0', value: 0 },
+  { label: 'Pin 1', value: 1 },
+  { label: 'Pin 2', value: 2 },
+  { label: 'Pin 3', value: 3 },
+  { label: 'Pin 4', value: 4 },
+  { label: 'Pin 5', value: 5 },
+  { label: 'Pin 6', value: 6 },
+  { label: 'Pin 7', value: 7 },
+];
+const states = [
+  { label: 'Low', value: 0 },
+  { label: 'High', value: 1 },
+];
 </script>
 
 <template>
@@ -87,6 +101,23 @@ const locations = [
         v-model="store.configs.override_tool_location.location" 
         label="Location" 
         :options="locations" 
+      />
+    </ServiceContainer>
+    <ServiceContainer class="flex-1" title="Set IO" id="set_io" @execute="() => store.executeService('set_io')">
+      <DropdownMenu 
+        v-model="store.configs.set_io.robot" 
+        label="Robot" 
+        :options="robots" 
+      />
+      <DropdownMenu 
+        v-model="store.configs.set_io.pin" 
+        label="Pin" 
+        :options="pins" 
+      />
+      <DropdownMenu 
+        v-model="store.configs.set_io.state" 
+        label="State" 
+        :options="states" 
       />
     </ServiceContainer>
   </div>
